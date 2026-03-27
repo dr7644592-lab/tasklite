@@ -461,3 +461,35 @@ const sortedTask = [task].sort((a, b) => {
 sortedTask.forEach(task => footer.before(renderTask(task)));
 
 
+
+let currentFilter = 'all'; //all | active | done
+
+let filtered = tasks.filter(task =>{
+    if(currentFilter === 'active') return !task.done;
+    if(currentFilter === 'done') return task.done;
+    return true;
+});
+
+
+const query = searchInput.value.trin().toLowerCase();
+if(query){
+    filtered = filtered.filter(task => {
+        task.text.toLowerCase().includes(query)
+    });
+
+    searchInput.addEventListener('input', renderaAll);
+}
+
+tabButtons.forEach(btn =>{
+    btn.addEventListener('click', () => {
+        tabButtons.forEach(b => b.classList.remove('tabs_item--active'));
+        btn.classList.add('tabs_item--active');
+    
+
+    if(btn,textContent.includes('Активные')) currentFilter = 'active';
+    else if (btn.textContent.includes('Завершенные')) currentFilter = 'done';
+    else currentFilter = 'all';
+
+        renderaAll();
+    });
+});
