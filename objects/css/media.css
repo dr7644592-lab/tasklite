@@ -1,0 +1,80 @@
+@media(max-width: 1025px){
+    .container{
+        max-width: 1024px;
+        padding-left: 100px;
+        padding-right: 100px;
+    }
+    .cards{
+        display: flex;
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+        gap: 16px;
+    }
+    .card{
+        flex: 0 0 100%; /* каждая карточка занимает всю ширину*/
+        scroll-snap-align: start; /* прилипает к краю при прокрутке*/
+    }
+    .artifacts_content{
+        flex-direction: column;
+    }
+}
+@media (max-width: 768px){
+    .container{
+        max-width: 768px;
+        padding-left: 50px;
+        padding-right: 50px;
+    }
+    .nav_list{
+        display: none;
+    }
+}
+@media (max-width: 430px){
+    .container{
+        max-width: 430px;
+        padding-left: 32px;
+        padding-right: 32px;
+    }
+    .hero_title{
+        font-size: 48px; /*вместо 60пх*/
+    }
+    .hero_decsr{
+        display: none;
+    }
+    .hero_conteiner{
+        padding-top: 50;
+        padding-bottom: 50px;
+    }
+    .hero{
+        margin-bottom: 60px; /* меньше воздуха между секциями*/
+    }
+    .support_title{
+        margin-bottom: 45px; /*заголовок ближе к форме*/
+    }
+    .pagination{
+        margin-top: 16px; /*чтобы небыло слишком далеко от карточек*/
+    }
+    .header_icons{
+        gap: 32px;
+    }
+    .artifacts_galarry{
+        width: 255px;
+        overflow-x: auto; /*горизонтальная прокрутка*/
+        overflow-y: hidden; /**вертикальная не нужна*/
+    }
+    .artefacts-gallary img{
+        display: block;
+        width: auto;
+        height: auto;
+        max-width: none;
+        max-height: none;
+    }
+    .support_descr{
+        display: none;
+    }
+    .support_input{
+        min-width: 255px;
+    }
+    .support_btn{
+        padding: 12px 17px;
+    }
+}
