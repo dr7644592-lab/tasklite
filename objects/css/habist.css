@@ -1,0 +1,63 @@
+/* Сброс */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+body {
+  font-family: 'Inter', 'Segoe UI', sans-serif;
+  background: #f5f7fb;
+  color: #1e1e2f;
+  line-height: 1.5;
+  min-height: 100vh;
+}
+
+.container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+/* Шапка */
+.header {
+  background: white;
+  border-bottom: 1px solid #e3dff0;
+  padding: 16px 0;
+  margin-bottom: 24px;
+}
+
+.header_container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.header_title {
+  font-size: 24px;
+  font-weight: 600;
+  color: #3e2c6b;
+}
+
+.tabs {
+  display: flex;
+  gap: 24px;
+}
+
+.tab {
+  text-decoration: none;
+  font-weight: 500;
+  color: #7b6c9e;
+  padding-bottom: 6px;
+  border-bottom: 2px solid transparent;
+}
+
+.tab.active {
+  color: #6a46aa;
+  border-bottom-color: #6a46aa;
+}
+
+.tab:hover {
+  color: #6a46aa;
+}
