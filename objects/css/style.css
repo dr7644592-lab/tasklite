@@ -24,6 +24,9 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 24px;
 }
 
 .header_title {
@@ -32,7 +35,11 @@ body {
   color: #3e2c6b;
 }
 
-.tabs { display: flex; gap: 24px; }
+.tabs {
+  display: flex;
+  gap: 24px;
+}
+
 .tab {
   text-decoration: none;
   font-weight: 500;
@@ -40,9 +47,14 @@ body {
   padding-bottom: 6px;
   border-bottom: 2px solid transparent;
 }
+
 .tab.active {
   color: #6a46aa;
   border-bottom-color: #6a46aa;
+}
+
+.tab:hover {
+  color: #6a46aa;
 }
 
 /* Заголовок страницы */

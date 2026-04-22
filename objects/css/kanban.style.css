@@ -22,39 +22,46 @@ body {
 /* Шапка */
 .header {
   background: white;
-  border-bottom: 1px solid #e9ebf0;
-  padding: 14px 0;
+  border-bottom: 1px solid #e3dff0;
+  padding: 16px 0;
   margin-bottom: 24px;
 }
+
 .header_container {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 24px;
 }
+
 .header_title {
-  font-size: 20px;
-  font-weight: 700;
-  color: #2d1f4e;
+  font-size: 24px;
+  font-weight: 600;
+  color: #3e2c6b;
 }
+
 .tabs {
   display: flex;
-  gap: 16px;
+  gap: 24px;
 }
+
 .tab {
   text-decoration: none;
   font-weight: 500;
-  color: #6b5b8a;
-  padding: 8px 18px;
-  border-radius: 8px;
-  transition: all 0.2s;
-  background: transparent;
+  color: #7b6c9e;
+  padding-bottom: 6px;
+  border-bottom: 2px solid transparent;
 }
+
 .tab.active {
-  background: #ede7f6;
   color: #6a46aa;
+  border-bottom-color: #6a46aa;
 }
+
 .tab:hover {
-  background: #f2ecfc;
+  color: #6a46aa;
 }
 
 /* Заголовок страницы */
