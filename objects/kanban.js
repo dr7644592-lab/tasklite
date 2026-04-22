@@ -165,19 +165,5 @@ document.querySelectorAll('.add-task').forEach(btn => {
   });
 });
 
-document.addEventListener('submit', e => e.preventDefault());
-
-// ---------- Добавляем демо-задачу "пробежка" при первом запуске ----------
-const totalTasks = boardData.todo.length + boardData['in-progress'].length + boardData.done.length;
-if (totalTasks === 0) {
-  boardData.todo.push({
-    title: 'пробежка',
-    desc: '',
-    priority: 'medium',
-    deadline: ''
-  });
-  saveBoard();
-}
-
 // ---------- Стартовый рендер ----------
 renderBoard();
