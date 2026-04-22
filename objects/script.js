@@ -593,4 +593,4 @@ function searchMessages(messages, query) {
 // Первичный рендер
 renderAll();
 
-}); // конец DOMContentLoaded
+});

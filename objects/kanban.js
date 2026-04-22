@@ -1,15 +1,17 @@
+// ---------- Инициализация данных ----------
 const columns = document.querySelectorAll('.column');
 let boardData = JSON.parse(localStorage.getItem('kanbanData')) || {
   todo: [],
   'in-progress': [],
-  done: [],
+  done: []
 };
 
+// ---------- Сохранение ----------
 function saveBoard() {
   localStorage.setItem('kanbanData', JSON.stringify(boardData));
 }
 
-// ---------- Вспомогательные функции (оставлены как есть) ----------
+// ---------- Приоритеты ----------
 function normalizePriority(value) {
   const v = String(value || '').trim().toLowerCase();
   if (['высокий', 'выс', 'в', 'high', 'h'].includes(v)) return 'high';
@@ -19,110 +21,16 @@ function normalizePriority(value) {
 }
 
 function priorityLabel(level) {
-  return level === 'high' ? 'Высокий приоритет'
-       : level === 'low'  ? 'Низкий приоритет'
-       : 'Средний приоритет';
+  return level === 'high' ? 'Высокий'
+       : level === 'low'  ? 'Низкий'
+       : 'Средний';
 }
 
-function escapeHtml(str) {
-  return String(str)
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;');
-}
-
-function getClosestTask(tasks) {
-  let closestTask = null;
-  let closestTime = Infinity;
-  const today = new Date();
-  for (const task of tasks) {
-    const status = String(task.status || '').trim().toLowerCase();
-    if (status !== 'done') {
-      const deadlineDate = new Date(task.deadline);
-      const diff = deadlineDate - today;
-      if (diff >= 0 && diff < closestTime) {
-        closestTime = diff;
-        closestTask = task;
-      }
-    }
-  }
-  if (!closestTask) return 'Нет активных задач';
-  return closestTask.title;
-}
-
-function getWinner(votes) {
-  const map = {};
-  for (const vote of votes) {
-    const name = String(vote || '').trim().toLowerCase();
-    if (!name) continue;
-    if (!map[name]) map[name] = 0;
-    map[name]++;
-  }
-  let max = 0;
-  let winner = null;
-  let isTie = false;
-  for (const name in map) {
-    if (map[name] > max) {
-      max = map[name];
-      winner = name;
-      isTie = false;
-    } else if (map[name] === max) {
-      isTie = true;
-    }
-  }
-  if (isTie) return 'Ничья';
-  return winner;
-}
-
-function getValidTags(input) {
-  const result = [];
-  const seen = {};
-  const parts = String(input || '').split(',');
-  for (let part of parts) {
-    const tag = part.trim().toLowerCase();
-    if (!tag) continue;
-    if (!seen[tag]) {
-      seen[tag] = true;
-      result.push(tag);
-    }
-  }
-  return result;
-}
-
-function renderTags(input) {
-  const seen = {};
-  const list = [];
-  const parts = String(input || '').split(',');
-  for (let part of parts) {
-    const tag = part.trim().toLowerCase();
-    if (!tag) continue;
-    if (!seen[tag]) {
-      seen[tag] = true;
-      list.push(tag);
-    }
-  }
-  let html = '<ul>';
-  for (const tag of list) {
-    const safeTag = escapeHtml(tag);
-    html += '<li>' + safeTag + '</li>';
-  }
-  html += '</ul>';
-  return html;
-}
-
-function searchMessages(messages, query) {
-  const result = [];
-  const normalizedQuery = String(query || '').trim().toLowerCase();
-  if (!normalizedQuery) return result;
-  for (const item of messages) {
-    const text = String(item.text || '');
-    const normalizedText = text.toLowerCase();
-    if (normalizedText.includes(normalizedQuery)) {
-      const safeText = escapeHtml(text);
-      result.push(safeText);
-    }
-  }
-  return result;
+// ---------- Обновление счётчика колонки ----------
+function updateCount(column) {
+  const countEl = column.querySelector('.column__count');
+  const status = column.dataset.status;
+  countEl.textContent = boardData[status].length;
 }
 
 // ---------- Drag & Drop ----------
@@ -143,10 +51,11 @@ function addDragEvents(el) {
   });
 }
 
+// Настройка колонок как drop-зон
 columns.forEach(column => {
   const taskList = column.querySelector('.task-list');
 
-  taskList.addEventListener('dragover', e => {
+  taskList.addEventListener('dragover', (e) => {
     e.preventDefault();
     column.classList.add('drag-over');
   });
@@ -159,12 +68,11 @@ columns.forEach(column => {
     e.preventDefault();
     column.classList.remove('drag-over');
 
-    const targetStatus = column.dataset.status;
     if (!draggedItem) return;
-
+    const targetStatus = column.dataset.status;
     const index = +draggedItem.dataset.index;
-    const movedTask = boardData[sourceStatus][index];
 
+    const movedTask = boardData[sourceStatus][index];
     boardData[sourceStatus].splice(index, 1);
     boardData[targetStatus].push(movedTask);
 
@@ -182,17 +90,43 @@ function renderBoard() {
 
     boardData[status].forEach((task, index) => {
       const el = document.createElement('article');
-      el.className = 'task kanban';
+      el.className = 'task';
       el.draggable = true;
       el.dataset.index = index;
       el.innerHTML = `
-        <h3 class="task__title">${escapeHtml(task.title)}</h3>
+        <div class="task__header">
+          <h3 class="task__title">${escapeHtml(task.title)}</h3>
+          <button class="task__delete" type="button" aria-label="Удалить задачу">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#cb6e6e" stroke-width="2">
+              <polyline points="3 6 5 6 21 6" />
+              <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6" />
+              <path d="M10 11v6" /><path d="M14 11v6" />
+              <path d="M9 6V4a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2" />
+            </svg>
+          </button>
+        </div>
         ${task.desc ? `<p class="task__desc">${escapeHtml(task.desc)}</p>` : ''}
         <footer class="task__footer">
           <span class="task__label ${task.priority}">${priorityLabel(task.priority)}</span>
-          <time class="task__date">${escapeHtml(task.deadline)}</time>
+          ${task.deadline ? `<time class="task__date">${escapeHtml(task.deadline)}</time>` : ''}
         </footer>
       `;
+      
+      // Кнопка удаления
+      const deleteBtn = el.querySelector('.task__delete');
+      deleteBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const columnStatus = el.closest('.column').dataset.status;
+        const taskIndex = boardData[columnStatus].findIndex(t => 
+          t.title === task.title && t.priority === task.priority
+        );
+        if (taskIndex !== -1) {
+          boardData[columnStatus].splice(taskIndex, 1);
+          saveBoard();
+          renderBoard();
+        }
+      });
+
       addDragEvents(el);
       taskList.appendChild(el);
     });
@@ -201,43 +135,49 @@ function renderBoard() {
   });
 }
 
-function updateCount(column) {
-  const countEl = column.querySelector('.column__count');
-  const status = column.dataset.status;
-  countEl.textContent = boardData[status].length;
+// Экранирование HTML
+function escapeHtml(str) {
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
 }
 
-// ---------- Добавление новой задачи ----------
+// ---------- Добавление задачи ----------
 document.querySelectorAll('.add-task').forEach(btn => {
   btn.addEventListener('click', () => {
     const column = btn.closest('.column');
     const status = column.dataset.status;
 
-    const title = prompt('Введите название задачи:') || '';
-    const desc = prompt('Описание (по желанию):') || '';
-    const priorityInput = prompt('Приоритет (Высокий / Средний / Низкий):') || 'Средний';
-    const deadline = prompt('Срок (например: до 12.11):') || '';
+    const title = prompt('Введите название задачи:')?.trim();
+    if (!title) return;
 
-    const cleanTitle = title.trim();
-    const cleanDesc = desc.trim();
-    const cleanDeadline = deadline.trim();
-    if (cleanTitle === '') return;
+    const priorityInput = prompt('Приоритет (Низкий / Средний / Высокий):', 'Средний');
+    const priority = normalizePriority(priorityInput);
 
-    const level = normalizePriority(priorityInput);
+    const desc = prompt('Описание (можно пропустить):')?.trim() || '';
+    const deadline = prompt('Срок (например: до 12.11):')?.trim() || '';
 
-    const newTask = {
-      title: cleanTitle,
-      desc: cleanDesc,
-      priority: level,
-      deadline: cleanDeadline
-    };
-
+    const newTask = { title, desc, priority, deadline };
     boardData[status].push(newTask);
     saveBoard();
     renderBoard();
   });
 });
 
-// ---------- Первичный рендер ----------
-renderBoard();
+document.addEventListener('submit', e => e.preventDefault());
 
+// ---------- Добавляем демо-задачу "пробежка" при первом запуске ----------
+const totalTasks = boardData.todo.length + boardData['in-progress'].length + boardData.done.length;
+if (totalTasks === 0) {
+  boardData.todo.push({
+    title: 'пробежка',
+    desc: '',
+    priority: 'medium',
+    deadline: ''
+  });
+  saveBoard();
+}
+
+// ---------- Стартовый рендер ----------
+renderBoard();
