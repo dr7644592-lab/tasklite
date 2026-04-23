@@ -1,7 +1,7 @@
 // Ожидаем полной загрузки DOM
 document.addEventListener('DOMContentLoaded', function() {
 
-// ========== УЧЕБНЫЕ ПРИМЕРЫ (изолированы) ==========
+// практика //
 let a = 10;
 let b = 5;
 let sum = a + b;
@@ -10,7 +10,7 @@ let difference = a - b;
 console.log(sum);
 console.log(difference);
 
-//------- Урок: операторы и условия -------//
+// операторы и условия //
 
 let titleEx = "";
 if(titleEx === ""){
@@ -231,7 +231,7 @@ for(let task of demoTasks){
 }
 console.log("Активные задачи:", activeTasks);
 
-// ========== ОСНОВНОЕ ПРИЛОЖЕНИЕ ==========
+//  ОСНОВНОЕ ПРИЛОЖЕНИЕ! //
 console.log('Запуск основного приложения');
 
 // Загружаем данные из localStorage
@@ -241,7 +241,7 @@ function saveTask() {
     localStorage.setItem('tasks', JSON.stringify(tasksApp));
 }
 
-// Создаём контейнер .tasks, если его нет
+// Создаём контейнер .tasks, если его нет //
 let container = document.querySelector('.tasks');
 if (!container) {
     container = document.createElement('div');
@@ -254,13 +254,13 @@ if (!container) {
     }
 }
 
-// Удаляем статичный пример задачи
+// Удаляем статичный пример задачи //
 const staticTask = document.querySelector('.task');
 if (staticTask && staticTask.closest('.tasks') === null) {
     staticTask.remove();
 }
 
-// Получаем элементы DOM
+// Получаем элементы DOM //
 const inputField = document.querySelector('.form-add_input');
 const addButton = document.querySelector('.form-add_button');
 const form = document.querySelector('.form-add');
@@ -280,7 +280,7 @@ console.log('clearButton:', clearButton);
 let sortOrder = 'new';      // old | new | az | za
 let currentFilter = 'all';  // all | active | done
 
-// Форматирование даты
+// Форматирование даты //
 function formatDate(date) {
     const d = String(date.getDate()).padStart(2, '0');
     const m = String(date.getMonth() + 1).padStart(2, '0');
@@ -290,7 +290,7 @@ function formatDate(date) {
     return `${d}.${m}.${y}, ${h}:${min}`;
 }
 
-// Рендер одной карточки
+// Рендер одной карточки //
 function renderTask(taskData) {
     const task = document.createElement('div');
     task.classList.add('task');
@@ -329,7 +329,7 @@ function renderTask(taskData) {
         }
     });
 
-    // Кнопка удаления
+    // Кнопка удаления //
     const deleteBtn = document.createElement('button');
     deleteBtn.classList.add('task_action', 'task_action--delete');
     deleteBtn.title = 'Удалить';
@@ -360,7 +360,7 @@ function renderTask(taskData) {
     return task;
 }
 
-// Обновление счётчиков
+// Обновление счётчиков //
 function updateCounters() {
     const total = tasksApp.length;
     const activeCount = tasksApp.filter(t => !t.done).length;
@@ -380,19 +380,19 @@ function updateCounters() {
     }
 }
 
-// Полная перерисовка списка
+// Полная перерисовка списка //
 function renderAll() {
     if (!container) return;
     container.innerHTML = '';
 
-    // Фильтрация
+    // Фильтрация //
     let filtered = tasksApp.filter(task => {
         if (currentFilter === 'active') return !task.done;
         if (currentFilter === 'done') return task.done;
         return true;
     });
 
-    // Поиск
+    // Поиск //
     const query = searchInput ? searchInput.value.trim().toLowerCase() : '';
     if (query) {
         filtered = filtered.filter(task =>
@@ -400,7 +400,7 @@ function renderAll() {
         );
     }
 
-    // Сортировка
+    // Сортировка //
     const sorted = [...filtered].sort((a, b) => {
         if (sortOrder === 'new') return b.id - a.id;
         if (sortOrder === 'old') return a.id - b.id;
@@ -417,7 +417,7 @@ function renderAll() {
     updateCounters();
 }
 
-// Добавление новой задачи
+// Добавление новой задачи //
 function addTask() {
     const text = inputField.value.trim();
     if (text === '' || text.length < 3) {
@@ -439,7 +439,7 @@ function addTask() {
     saveTask();
 }
 
-// ---------- Обработчики событий ----------
+// Обработчики событий //
 if (form) {
     form.addEventListener('submit', (event) => {
         event.preventDefault();
@@ -488,7 +488,7 @@ if (clearButton) {
     });
 }
 
-// Дополнительные функции (оставлены)
+// Дополнительные функции //
 function escapeHtml(str) {
   return String(str)
     .replace(/&/g, '&amp;')
@@ -590,7 +590,7 @@ function searchMessages(messages, query) {
   return result;
 }
 
-// Первичный рендер
+// Первичный рендер //
 renderAll();
 
 });

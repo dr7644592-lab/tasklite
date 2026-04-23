@@ -1,4 +1,4 @@
-// ---------- Инициализация данных ----------
+//  Инициализация данных //
 const columns = document.querySelectorAll('.column');
 let boardData = JSON.parse(localStorage.getItem('kanbanData')) || {
   todo: [],
@@ -6,12 +6,12 @@ let boardData = JSON.parse(localStorage.getItem('kanbanData')) || {
   done: []
 };
 
-// ---------- Сохранение ----------
+//  Сохранение //
 function saveBoard() {
   localStorage.setItem('kanbanData', JSON.stringify(boardData));
 }
 
-// ---------- Приоритеты ----------
+//  Приоритеты //
 function normalizePriority(value) {
   const v = String(value || '').trim().toLowerCase();
   if (['высокий', 'выс', 'в', 'high', 'h'].includes(v)) return 'high';
@@ -26,14 +26,14 @@ function priorityLabel(level) {
        : 'Средний';
 }
 
-// ---------- Обновление счётчика колонки ----------
+//  Обновление счётчика колонки //
 function updateCount(column) {
   const countEl = column.querySelector('.column__count');
   const status = column.dataset.status;
   countEl.textContent = boardData[status].length;
 }
 
-// ---------- Drag & Drop ----------
+//  Drag & Drop //
 let draggedItem = null;
 let sourceStatus = null;
 
@@ -81,7 +81,7 @@ columns.forEach(column => {
   });
 });
 
-// ---------- Отрисовка доски ----------
+//  Отрисовка доски  //
 function renderBoard() {
   columns.forEach(column => {
     const status = column.dataset.status;
@@ -112,7 +112,7 @@ function renderBoard() {
         </footer>
       `;
       
-      // Кнопка удаления
+      // Кнопка удаления //
       const deleteBtn = el.querySelector('.task__delete');
       deleteBtn.addEventListener('click', (e) => {
         e.stopPropagation();
