@@ -135,7 +135,7 @@ function renderBoard() {
   });
 }
 
-// Экранирование HTML
+// Экранирование HTML "добавлено после сдачи"
 function escapeHtml(str) {
   return String(str)
     .replace(/&/g, '&amp;')
