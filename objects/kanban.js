@@ -135,6 +135,13 @@ function renderBoard() {
   });
 }
 
+// Экранирование HTML
+function escapeHtml(str) {
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
+}
 
 // ---------- Добавление задачи ----------
 document.querySelectorAll('.add-task').forEach(btn => {
